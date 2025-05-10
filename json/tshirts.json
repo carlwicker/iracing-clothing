@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "iRacing Logo 1",
+    "price": 29.99,
+    "image": "/img/tshirts/1.webp",
+    "description": "Official iRacing logo t-shirt in classic black. Made from premium cotton for maximum comfort.",
+    "colors": ["black", "white", "red"],
+    "sizes": ["S", "M", "L", "XL", "XXL"]
+  },
+  {
+    "id": 2,
+    "name": "iRacing Logo 2",
+    "price": 24.99,
+    "image": "/img/tshirts/2.webp",
+    "description": "Show your love for speed with this stylish racer tee.",
+    "colors": ["blue", "gray", "white"],
+    "sizes": ["S", "M", "L", "XL"]
+  },
+  {
+    "id": 3,
+    "name": "iRacing Logo 3",
+    "price": 19.99,
+    "image": "/img/tshirts/3.jpg",
+    "description": "Perfect for track days, this t-shirt is lightweight and breathable.",
+    "colors": ["black", "green", "yellow"],
+    "sizes": ["M", "L", "XL", "XXL"]
+  }
+]
