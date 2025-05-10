@@ -1,22 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { CartContext } from "./ShoppingCart";
 
 export default function TopNav() {
   const cartContext = useContext(CartContext);
-  const [cartItemCount, setCartItemCount] = useState(0);
-
-  useEffect(() => {
-    if (cartContext) {
-      const count = cartContext.cartItems.reduce(
-        (total: number, item: { quantity: number }) => total + item.quantity,
-        0
-      );
-      setCartItemCount(count);
-    }
-  }, [cartContext]);
+  const cartItemCount = cartContext
+    ? cartContext.cartItems.reduce((total, item) => total + item.quantity, 0)
+    : 0;
 
   return (
     <nav className="w-full bg-white text-black py-4 px-6">
@@ -26,24 +18,24 @@ export default function TopNav() {
         </h1>
         <ul className="flex space-x-4 text-sm font-light gap-5">
           <li>
-            <a href="/" className="hover:underline">
+            <Link href="/" className="hover:underline">
               Home
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/tshirts" className="hover:underline">
+            <Link href="/tshirts" className="hover:underline">
               T-Shirts
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/cart" className="hover:underline">
+            <Link href="/cart" className="hover:underline">
               Cart ({cartItemCount})
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/account" className="hover:underline">
+            <Link href="/account" className="hover:underline">
               Account
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

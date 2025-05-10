@@ -30,6 +30,7 @@ export default function CartPage() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     style={{ objectFit: "cover" }}
                     className="rounded-lg"
+                    priority={true}
                   />
                 </div>
                 <div>
@@ -71,6 +72,12 @@ export default function CartPage() {
                 className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
               >
                 Clear Cart
+              </button>
+              <button
+                onClick={() => (window.location.href = "/checkout")}
+                className="ml-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              >
+                Proceed to Checkout
               </button>
             </div>
           </div>

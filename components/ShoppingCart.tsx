@@ -7,8 +7,9 @@ import {
   useContext,
   ReactNode,
 } from "react";
+import tshirts from "@/json/tshirts.json";
 
-interface CartItem {
+export interface CartItem {
   id: number;
   name: string;
   price: number;
@@ -17,6 +18,7 @@ interface CartItem {
   colors: string[];
   sizes: string[];
   quantity: number;
+  stripePriceId?: string; // Added Stripe Price ID
 }
 
 interface CartContextType {
@@ -52,12 +54,19 @@ export function ShoppingCartProvider({ children }: { children: ReactNode }) {
   }, [cartItems]);
 
   const addToCart = (item: CartItem) => {
+    const tshirt = tshirts.find((t) => t.id === item.id);
+    if (!tshirt) {
+      console.error(`T-shirt with ID ${item.id} not found in tshirts.json`);
+      return;
+    }
+
     const existingItem = cartItems.find(
       (i) =>
         i.id === item.id &&
         i.sizes[0] === item.sizes[0] &&
         i.colors[0] === item.colors[0]
     );
+
     if (existingItem) {
       const updatedItems = cartItems.map((i) =>
         i.id === item.id &&
@@ -69,7 +78,14 @@ export function ShoppingCartProvider({ children }: { children: ReactNode }) {
       setCartItems(updatedItems);
       saveCart(updatedItems);
     } else {
-      const newCartItems = [...cartItems, { ...item, quantity: 1 }];
+      const newCartItems = [
+        ...cartItems,
+        {
+          ...item,
+          price: tshirt.price, // Assign price from tshirts.json
+          quantity: 1,
+        },
+      ];
       setCartItems(newCartItems);
       saveCart(newCartItems);
     }
