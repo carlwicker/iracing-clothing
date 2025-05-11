@@ -8,12 +8,12 @@ export async function GET() {
   try {
     const result = await createPrintfulOrder(imageUrl, metadata);
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Printful error:", error);
 
     return NextResponse.json(
       {
-        error: errormessage || JSON.stringify(error),
+        error: error instanceof Error ? error.message : JSON.stringify(error),
       },
       { status: 500 }
     );

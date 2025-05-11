@@ -47,28 +47,19 @@ export async function POST(request: Request) {
 
     console.log("Received cartItems from frontend:", cartItems);
 
-    cartItems.forEach((item, index) => {
+    cartItems.forEach((item) => {
       if (!item.name || typeof item.name !== "string") {
-        console.error(
-          `Invalid or missing name for item at index ${index}:`,
-          item
-        );
+        console.error(`Invalid or missing name for item:`, item);
       }
       if (!item.price || typeof item.price !== "number") {
-        console.error(
-          `Invalid or missing price for item at index ${index}:`,
-          item
-        );
+        console.error(`Invalid or missing price for item:`, item);
       }
       if (!item.quantity || typeof item.quantity !== "number") {
-        console.error(
-          `Invalid or missing quantity for item at index ${index}:`,
-          item
-        );
+        console.error(`Invalid or missing quantity for item:`, item);
       }
     });
 
-    cartItems.forEach((item, index) => {
+    cartItems.forEach((item) => {
       if (!productPrices.has(item.name)) {
         console.warn(`Item name '${item.name}' not found in tshirts.json`);
       }

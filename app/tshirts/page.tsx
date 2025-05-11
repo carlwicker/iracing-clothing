@@ -2,8 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useContext } from "react"; // Ensure correct import of useContext
-import { CartContext } from "@/components/ShoppingCart";
 import tshirts from "@/json/tshirts.json";
 
 interface TShirt {
@@ -19,8 +17,6 @@ interface TShirt {
 const tshirtData = tshirts as TShirt[];
 
 export default function TShirtsPage() {
-  const cartContext = useContext(CartContext);
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

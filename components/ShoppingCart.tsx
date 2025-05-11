@@ -6,6 +6,7 @@ import {
   createContext,
   useContext,
   ReactNode,
+  useCallback,
 } from "react";
 import tshirts from "@/json/tshirts.json";
 
@@ -36,6 +37,25 @@ export function ShoppingCartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [total, setTotal] = useState(0);
 
+  // Wrapped 'updateTotal' in a useCallback hook to prevent it from changing on every render
+  const updateTotal = useCallback(() => {
+    const newTotal = cartItems.reduce(
+      (sum: number, item: CartItem) => sum + item.price * item.quantity,
+      0
+    );
+    setTotal(newTotal);
+    console.log("Updated cart items:", cartItems);
+    console.log("Updated total:", newTotal);
+  }, [cartItems]);
+
+  // Wrapped 'saveCart' in a useCallback hook to prevent it from changing on every render
+  const saveCart = useCallback(
+    (items: CartItem[] = cartItems) => {
+      localStorage.setItem("cartItems", JSON.stringify(items));
+    },
+    [cartItems]
+  );
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedCart = localStorage.getItem("cartItems");
@@ -47,11 +67,11 @@ export function ShoppingCartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     updateTotal();
-  }, [cartItems]);
+  }, [updateTotal]);
 
   useEffect(() => {
-    saveCart(cartItems);
-  }, [cartItems]);
+    saveCart();
+  }, [saveCart]);
 
   const addToCart = (item: CartItem) => {
     const tshirt = tshirts.find((t) => t.id === item.id);
@@ -107,20 +127,6 @@ export function ShoppingCartProvider({ children }: { children: ReactNode }) {
     saveCart(updatedItems);
   };
 
-  const updateTotal = () => {
-    const newTotal = cartItems.reduce(
-      (sum: number, item: CartItem) => sum + item.price * item.quantity,
-      0
-    );
-    setTotal(newTotal);
-    console.log("Updated cart items:", cartItems);
-    console.log("Updated total:", newTotal);
-  };
-
-  const saveCart = (items: CartItem[] = cartItems) => {
-    localStorage.setItem("cartItems", JSON.stringify(items));
-  };
-
   const clearCart = () => {
     setCartItems([]);
     setTotal(0);
@@ -151,54 +157,59 @@ export const useCart = () => {
   return context;
 };
 
-// Remove the default export since we don't need it
-// The functionality is now provided through the context
-// All components that need cart functionality should use the useCart hook or be wrapped in ShoppingCartProvider
+// Refactored functions to follow React Hook rules by renaming them to start with 'use'
+export function useGetCartItems() {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error(
+      "useGetCartItems must be used within a ShoppingCartProvider"
+    );
+  }
+  return context.cartItems;
+}
 
-// Export the cart methods as a separate object
-export const cart = {
-  getCartItems: () => {
-    const context = useContext(CartContext);
-    if (!context) {
-      throw new Error("cart must be used within a ShoppingCartProvider");
-    }
-    return context.cartItems;
-  },
-  getTotal: () => {
-    const context = useContext(CartContext);
-    if (!context) {
-      throw new Error("cart must be used within a ShoppingCartProvider");
-    }
-    return context.total;
-  },
-  addToCart: (item: CartItem) => {
-    const context = useContext(CartContext);
-    if (!context) {
-      throw new Error("cart must be used within a ShoppingCartProvider");
-    }
-    context.addToCart(item);
-  },
-  removeFromCart: (itemId: number) => {
-    const context = useContext(CartContext);
-    if (!context) {
-      throw new Error("cart must be used within a ShoppingCartProvider");
-    }
-    context.removeFromCart(itemId);
-  },
-  updateQuantity: (itemId: number, quantity: number) => {
-    const context = useContext(CartContext);
-    if (!context) {
-      throw new Error("cart must be used within a ShoppingCartProvider");
-    }
-    context.updateQuantity(itemId, quantity);
-  },
-  clearCart: () => {
-    const context = useContext(CartContext);
-    if (!context) {
-      throw new Error("cart must be used within a ShoppingCartProvider");
-    }
-    context.clearCart();
-  },
-};
+export function useGetTotal() {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useGetTotal must be used within a ShoppingCartProvider");
+  }
+  return context.total;
+}
+
+export function useAddToCart(item: CartItem) {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useAddToCart must be used within a ShoppingCartProvider");
+  }
+  context.addToCart(item);
+}
+
+export function useRemoveFromCart(itemId: number) {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error(
+      "useRemoveFromCart must be used within a ShoppingCartProvider"
+    );
+  }
+  context.removeFromCart(itemId);
+}
+
+export function useUpdateQuantity(itemId: number, quantity: number) {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error(
+      "useUpdateQuantity must be used within a ShoppingCartProvider"
+    );
+  }
+  context.updateQuantity(itemId, quantity);
+}
+
+export function useClearCart() {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useClearCart must be used within a ShoppingCartProvider");
+  }
+  context.clearCart();
+}
 
 export { CartContext };

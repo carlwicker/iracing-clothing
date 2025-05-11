@@ -4,11 +4,22 @@ import { useState, useContext } from "react";
 import Image from "next/image";
 import { CartContext } from "@/components/ShoppingCart";
 
+// Corrected the 'id' field in the 'Item' interface to be of type 'number'
+interface Item {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  description: string;
+  colors: string[];
+  sizes: string[];
+}
+
 export default function UploadForm() {
   const [file, setFile] = useState<File | null>(null);
   const [timecode, setTimecode] = useState("");
   const [camera, setCamera] = useState("");
-  const [previewedItems, setPreviewedItems] = useState<any[]>([]); // Replace 'any' with the appropriate type
+  const [previewedItems] = useState<Item[]>([]); // Updated to use 'Item' type
   const cartContext = useContext(CartContext); // Use the correct cart context
 
   const handleSubmit = async (e: React.FormEvent) => {

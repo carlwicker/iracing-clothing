@@ -24,12 +24,16 @@ export default function TShirtDetailsPage() {
   const tshirtId = parseInt(params.id as string);
   const tshirt = tshirtData.find((t) => t.id === tshirtId);
 
+  const [selectedColor, setSelectedColor] = useState(
+    tshirt ? tshirt.colors[0] : ""
+  );
+  const [selectedSize, setSelectedSize] = useState(
+    tshirt ? tshirt.sizes[0] : ""
+  );
+
   if (!tshirt) {
     return <div className="text-center py-8">T-Shirt not found</div>;
   }
-
-  const [selectedColor, setSelectedColor] = useState(tshirt.colors[0]);
-  const [selectedSize, setSelectedSize] = useState(tshirt.sizes[0]);
 
   return (
     <div className="container mx-auto px-4 py-8">
