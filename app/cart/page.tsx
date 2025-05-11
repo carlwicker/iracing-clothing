@@ -40,7 +40,9 @@ export default function CartPage() {
                   <p>Size: {item.sizes[0]}</p>
                   <p>Color: {item.colors[0]}</p>
                   <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() =>
+                      removeFromCart(item.id, item.sizes[0], item.colors[0])
+                    }
                     className="text-red-600 hover:underline"
                   >
                     Remove

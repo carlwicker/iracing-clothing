@@ -31,7 +31,7 @@ export default function UploadForm() {
     formData.append("timecode", timecode);
     formData.append("camera", camera);
 
-    const res = await fetch("/api/upload", {
+    const res = await fetch("/app/api/upload", {
       method: "POST",
       body: formData,
     });

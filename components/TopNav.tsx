@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { useContext } from "react";
 import { CartContext } from "./ShoppingCart";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function TopNav() {
   const cartContext = useContext(CartContext);
   const cartItemCount = cartContext
     ? cartContext.cartItems.reduce((total, item) => total + item.quantity, 0)
     : 0;
+
+  const { data: session } = useSession();
 
   return (
     <nav className="w-full bg-white text-black py-4 px-6">
@@ -36,6 +39,17 @@ export default function TopNav() {
             <Link href="/account" className="hover:underline">
               Account
             </Link>
+          </li>
+          <li>
+            {session ? (
+              <a onClick={() => signOut()} className="hover:underline">
+                Logout
+              </a>
+            ) : (
+              <a onClick={() => signIn()} className="hover:underline">
+                Login
+              </a>
+            )}
           </li>
         </ul>
       </div>

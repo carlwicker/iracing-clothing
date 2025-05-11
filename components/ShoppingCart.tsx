@@ -26,7 +26,7 @@ interface CartContextType {
   cartItems: CartItem[];
   total: number;
   addToCart: (item: CartItem) => void;
-  removeFromCart: (itemId: number) => void;
+  removeFromCart: (itemId: number, size: string, color: string) => void;
   updateQuantity: (itemId: number, quantity: number) => void;
   clearCart: () => void;
 }
@@ -111,9 +111,16 @@ export function ShoppingCartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const removeFromCart = (itemId: number) => {
+  const removeFromCart = (itemId: number, size: string, color: string) => {
     setCartItems((prevCartItems) => {
-      const updatedItems = prevCartItems.filter((item) => item.id !== itemId);
+      const updatedItems = prevCartItems.filter(
+        (item) =>
+          !(
+            item.id === itemId &&
+            item.sizes[0] === size &&
+            item.colors[0] === color
+          )
+      );
       saveCart(updatedItems);
       return updatedItems;
     });
@@ -184,14 +191,14 @@ export function useAddToCart(item: CartItem) {
   context.addToCart(item);
 }
 
-export function useRemoveFromCart(itemId: number) {
+export function useRemoveFromCart(itemId: number, size: string, color: string) {
   const context = useContext(CartContext);
   if (!context) {
     throw new Error(
       "useRemoveFromCart must be used within a ShoppingCartProvider"
     );
   }
-  context.removeFromCart(itemId);
+  context.removeFromCart(itemId, size, color);
 }
 
 export function useUpdateQuantity(itemId: number, quantity: number) {

@@ -1,12 +1,9 @@
-import type { Metadata } from "next";
+"use client";
+
 import "./globals.css";
 import { ShoppingCartProvider } from "@/components/ShoppingCart";
 import TopNav from "../components/TopNav";
-
-export const metadata: Metadata = {
-  title: "Iracing Clothing",
-  description: "Iracing Clothing Store",
-};
+import { SessionProvider } from "next-auth/react";
 
 export default function RootLayout({
   children,
@@ -16,12 +13,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col">
-        <ShoppingCartProvider>
-          <TopNav />
-          <main className="flex-col container mx-auto px-4 py-8">
-            {children}
-          </main>
-        </ShoppingCartProvider>
+        <SessionProvider>
+          <ShoppingCartProvider>
+            <TopNav />
+            <main className="flex-col container mx-auto px-4 py-8">
+              {children}
+            </main>
+          </ShoppingCartProvider>
+        </SessionProvider>
       </body>
     </html>
   );
